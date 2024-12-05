@@ -11,7 +11,6 @@ import server.driven.ui.components.RockText
 fun App(
     content: @Composable () -> Unit
 ) {
-
     MaterialTheme {
         content()
     }

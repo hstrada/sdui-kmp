@@ -45,8 +45,14 @@ class MainActivity : ComponentActivity() {
             Json.decodeFromString<List<@Polymorphic RockComponent>>(
                 """
                 [
-                  {"type": "RockText", "text":"Hello World1"}, 
-                  {"type": "RockText", "text":"Hello World2"}
+                  { 
+                    "type": "RockColumn",
+                    "content": 
+                    [
+                      {"type": "RockText", "properties":  { "text":"Hello World1" }}, 
+                      {"type": "RockText", "properties":  { "text":"Hello World2" }}
+                    ]
+                  }
                 ]
                 """.trimIndent()
             )
