@@ -57,12 +57,15 @@ class MainActivity : ComponentActivity() {
                 """.trimIndent()
             )
 
+        @Composable
+        fun renderContent(content: List<RockComponent>) = content.forEach {
+            it.render()
+        }
+
         setContent {
             App(content = {
                 Column {
-                    content.forEach {
-                        it.render()
-                    }
+                    renderContent(content)
                 }
             })
         }
