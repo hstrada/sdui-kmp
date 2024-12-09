@@ -5,69 +5,99 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import kotlinx.serialization.Polymorphic
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.modules.SerializersModule
-import kotlinx.serialization.modules.polymorphic
-import kotlinx.serialization.modules.subclass
-import server.driven.ui.components.RockColumn
-import server.driven.ui.components.RockComponent
-import server.driven.ui.components.RockText
+import server.driven.ui.ui.RockScreen
 
 class MainActivity : ComponentActivity() {
-    private val appModule = SerializersModule {
-        polymorphic(RockComponent::class) {
-            subclass(RockText::class)
-            subclass(RockColumn::class)
-        }
+
+    private val jsonConfig = Json {
+        prettyPrint = true
+        isLenient = true
+        ignoreUnknownKeys = true
+        encodeDefaults = true
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        Json {
-            serializersModule = appModule
-            prettyPrint = true
-            isLenient = true
-            ignoreUnknownKeys = true
-            encodeDefaults = true
-            classDiscriminator = "type"
-        }
-
-        val content =
-            Json.decodeFromString<List<@Polymorphic RockComponent>>(
+        val c =
+            jsonConfig.decodeFromString<RockScreen>(
                 """
-                [
-                  { 
-                    "type": "RockColumn",
-                    "content": 
-                    [
-                      {"type": "RockText", "properties":  { "text":"Hello World1" }}, 
-                      {"type": "RockText", "properties":  { "text":"Hello World2" }}
-                    ]
+                  {
+                    "root": {
+                        "id": "screen",
+                        "name": "screen",
+                        "element": {
+                          "type": "layout",
+                          "name": "column",
+                          "properties": {
+                            "padding": "12px"
+                          }
+                        },
+                        "children": ["title", "row"],
+                        "content" : {
+                            "title": {
+                            "id": "title",
+                            "name": "title",
+                            "element": {
+                              "type": "widget",
+                              "name": "text",
+                              "properties": {
+                                "text" : "Hello World",
+                                "color": "greenStone"
+                              }
+                            }
+                         },
+                         "row": {
+                            "id": "row",
+                            "name": "row",
+                            "element": {
+                              "type": "layout",
+                              "name": "row"
+                            },
+                            "children": ["subtitle", "primary"],
+                            "content": {
+                              "subtitle": {
+                                "id": "subtitle",
+                                "name": "subtitle",
+                                "element": {
+                                  "type": "widget",
+                                  "name": "text",
+                                  "properties": {
+                                    "text" : "Hello World Subtitle",
+                                    "color": "greenStone"
+                                  }
+                                }
+                             },
+                             "primary": {
+                                "id": "primary",
+                                "name": "primary",
+                                "element": {
+                                  "type": "widget",
+                                  "name": "button",
+                                  "properties": {
+                                    "text" : "Clique Aqui"
+                                  },
+                                  "action": {
+                                    "onPress": "xpto"
+                                  }
+                                }
+                             }
+                            }
+                         }
+                        }
+                      }
                   }
-                ]
                 """.trimIndent()
             )
 
-        @Composable
-        fun renderContent(content: List<RockComponent>) = content.forEach {
-            it.render()
-        }
-
         setContent {
-            App(content = {
-                Column {
-                    renderContent(content)
-                }
-            })
+            App(content = { RockScreen(c.root).render() })
         }
     }
 }
