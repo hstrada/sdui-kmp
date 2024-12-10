@@ -36,8 +36,15 @@ data class RockScreen(
                 RockText(text = it)
             }
 
-            "button" -> properties?.get("text")?.let {
-                RockButton(text = it) {}
+            "button" -> properties?.get("action")?.let {
+//                val onClick = when (it.get("type")) {
+//                    "DeepLink" -> {}
+//                    "URL" -> {}
+//                }
+                RockButton(text = it) {
+                    // onClick(url)
+                }
+
             }
 
             else -> null
@@ -47,14 +54,14 @@ data class RockScreen(
     fun renderStack(root: RockRoot) =
         when (root.element.name) {
             "column" -> Column(
-                    modifier = Modifier.fillMaxSize(),
-                ) {
-                    root.children?.map {
-                        root.content?.get(it)?.let { it1 ->
-                            base(it1)
-                        }
+                modifier = Modifier.fillMaxSize(),
+            ) {
+                root.children?.map {
+                    root.content?.get(it)?.let { it1 ->
+                        base(it1)
                     }
                 }
+            }
 
 
             else -> Row {

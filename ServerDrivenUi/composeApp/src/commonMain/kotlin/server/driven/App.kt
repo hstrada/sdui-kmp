@@ -1,22 +1,10 @@
 package server.driven
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import kotlinx.serialization.json.Json
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import server.driven.ui.RockScreen
-
-import serverdrivenui.composeapp.generated.resources.Res
-import serverdrivenui.composeapp.generated.resources.compose_multiplatform
 
 @Composable
 @Preview
@@ -52,7 +40,7 @@ fun App() {
                               "type": "widget",
                               "name": "text",
                               "properties": {
-                                "text" : "Hello World da SDUI",
+                                "text" : "SDUI",
                                 "color": "greenStone"
                               }
                             }
@@ -88,7 +76,12 @@ fun App() {
                                     "text" : "Clique Aqui"
                                   },
                                   "action": {
-                                    "onPress": "xpto"
+                                    "type": "DeepLink",
+                                    "onPress": "xpto",
+                                    "analytics": {
+                                        "viewed": "",
+                                        "clicked": ""
+                                    }
                                   }
                                 }
                              }
