@@ -37,7 +37,7 @@ data class RockScreen(
             }
 
             "button" -> properties?.get("text")?.let {
-                RockButton(text = "heelo") {}
+                RockButton(text = it) {}
             }
 
             else -> null
